@@ -1,0 +1,27 @@
+# Build artifacts
+node_modules/
+target/
+dist/
+build/
+.tsbuildinfo
+
+# Local logs / temp
+*.log
+.DS_Store
+.env
+.env.local
+.env.*.local
+
+# Editor / IDE
+.idea/
+.vscode/
+
+# Lockfiles — keep package-lock.json so installs are reproducible
+# (but ignore Cargo.lock from any future Rust components since this is
+# a TS-only repo today)
+**/Cargo.lock
+
+# Local-only artifacts (never published)
+shield-pool-fork/
+upstream-issues/
+MAINNET.md
