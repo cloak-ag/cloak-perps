@@ -29,6 +29,12 @@ export type {
   ReshieldUsdcResult,
 } from "./reshield-usdc.js";
 
+export { exitUsdcToWallet } from "./exit-to-wallet.js";
+export type {
+  ExitUsdcToWalletOptions,
+  ExitUsdcToWalletResult,
+} from "./exit-to-wallet.js";
+
 export { preCloakFee, CLOAK_FIXED_FEE_LAMPORTS, CLOAK_VARIABLE_BPS } from "./lib/fees.js";
 export { quoteSolForUsdcOut } from "./lib/jupiter-quote.js";
 
