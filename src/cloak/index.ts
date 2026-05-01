@@ -31,3 +31,7 @@ export type {
 
 export { preCloakFee, CLOAK_FIXED_FEE_LAMPORTS, CLOAK_VARIABLE_BPS } from "./lib/fees.js";
 export { quoteSolForUsdcOut } from "./lib/jupiter-quote.js";
+
+// Signer abstraction — for wiring browser wallets (Phantom/Backpack/etc.)
+export { isKeypair, signerPublicKey, toSdkSignerOptions } from "./lib/signer.js";
+export type { Signer, WalletAdapterLike, SdkSignerOptions } from "./lib/signer.js";
