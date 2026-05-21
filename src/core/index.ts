@@ -1,11 +1,14 @@
 /**
- * @cloak.dev/perps/core — venue-agnostic interface, types, and the
- * Aggregator that routes intents across registered venues.
+ * @cloak.dev/perps/core — venue interface, types, and the
+ * `PhoenixTrader` that wraps Phoenix Eternal (`RiseVenue`) under
+ * Cloak's shielded-trader (T) flow. `Aggregator` remains as a
+ * deprecated alias.
  */
 
 export type { PerpVenue } from "./venue.js";
 
 export {
+  PhoenixTrader,
   Aggregator,
   chooseVenue,
   defaultVenueScore,

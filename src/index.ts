@@ -1,12 +1,13 @@
 /**
- * @cloak.dev/perps — privacy-first perpetuals integration kit.
+ * @cloak.dev/perps — privacy-first perpetuals on Phoenix.
  *
- * Single-package re-export. For tree-shaking, prefer the namespace
- * sub-paths (`@cloak.dev/perps/core`, `/cloak`, `/rise`, `/jupiter`,
- * `/node`).
+ * Cloak Perp is built on top of Phoenix Eternal. The shielded-trader
+ * flow (W → Cloak USDC pool → T → Phoenix → exit → X) lives in the
+ * `/cloak` subpath; the Phoenix adapter lives in `/rise`. For
+ * tree-shaking, prefer namespace imports over this barrel.
  */
 
-// Core (venue-agnostic types + interface)
+// Core (venue interface, types, PhoenixTrader)
 export * from "./core/index.js";
 
 // Cloak privacy primitives
@@ -38,16 +39,3 @@ export {
   sendIxs,
   web3KeypairToKitSigner,
 } from "./rise/index.js";
-
-// Jupiter Perpetuals adapter
-export {
-  JupiterVenue,
-  type JupiterVenueOptions,
-  fullPipeline as jupiterPipeline,
-  type JupiterFullPipelineOptions,
-  type JupiterFullPipelineResult,
-  computeFreeCollateral,
-  type FreeCollateralBreakdown,
-  // namespaced constants live on the `/jupiter` subpath; not re-exported
-  // at top level to avoid name clashes with rise's same-named primitives.
-} from "./jupiter/index.js";

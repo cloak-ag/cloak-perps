@@ -1,23 +1,20 @@
 /**
- * Privacy-first perps aggregator core.
+ * Phoenix-backed trader for Cloak Perp.
  *
- * Given a trade intent + a set of venue adapters, pick the venue that:
- *   1. supports the requested orderType,
- *   2. accepts the requested collateral mint,
- * and rank compatible venues by a configurable score function.
+ * Originally written as a venue-agnostic aggregator (multi-venue
+ * routing across Phoenix Eternal + Jupiter Perpetuals). Cloak Perp
+ * has since narrowed to Phoenix as the sole venue — `PhoenixTrader`
+ * is the new name for what was `Aggregator`. The class still accepts
+ * an array of `PerpVenue` for testing / future re-introduction of
+ * alternates, but in production we pass a single `RiseVenue`.
  *
- * Default scoring prefers atomic settlement (no keeper dependency) and
- * permissionless venues (no allowlist gate). Override `score` to change.
+ * `Aggregator` remains exported as a deprecated alias so existing
+ * consumers don't break on upgrade.
  *
- * `openMulti(intents[])` is the Synthesis-style multi-position primitive:
- * one trader, multiple intents, parallel submission across venues.
- *
- * What this module does NOT do (yet):
- *   - quote-aware routing (best execution price, depth)
- *   - funding-rate-aware routing (which venue's funding is cheapest)
- *   - splitting a single intent across venues
- *
- * Those need a `quoteOpen` extension on `PerpVenue`. Out of scope here.
+ * `openMulti(intents[])` keeps its role: one shielded trader (T),
+ * multiple intents submitted in parallel — useful for portfolio
+ * execution, TWAP slices, hedge legs, etc. — with all order flow
+ * carrying the same T account.
  */
 
 import type { Connection, Keypair, PublicKey } from "@solana/web3.js";
@@ -123,12 +120,12 @@ export interface OpenMultiOutcome {
  * Reads (`getPosition`, `listPositions`) fan out across all venues and
  * merge results — a position can live on any venue, so we ask all.
  */
-export class Aggregator {
+export class PhoenixTrader {
   constructor(
     public readonly venues: readonly PerpVenue[],
     private readonly score: VenueScoreFn = defaultVenueScore,
   ) {
-    if (venues.length === 0) throw new Error("Aggregator: at least one venue required");
+    if (venues.length === 0) throw new Error("PhoenixTrader: at least one venue required");
   }
 
   pick(intent: TradeIntent): VenueSelection {
@@ -347,3 +344,11 @@ export class Aggregator {
     };
   }
 }
+
+/**
+ * @deprecated Use `PhoenixTrader`. Cloak Perp is single-venue (Phoenix);
+ * the old aggregator framing was misleading. This alias stays so existing
+ * imports keep working on upgrade.
+ */
+export const Aggregator = PhoenixTrader;
+export type Aggregator = PhoenixTrader;
