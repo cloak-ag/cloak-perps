@@ -65,6 +65,17 @@ export interface OpenPositionParams {
   /** Slippage tolerance in basis points (market orders). */
   slippageBps?: number;
   orderType: OrderType;
+  /** Only allowed to reduce / close existing position; never increase. */
+  reduceOnly?: boolean;
+  /** Post-only — order rejected if it would cross the book.
+   *  Limit-only; ignored for market orders. */
+  postOnly?: boolean;
+  /** Optional take-profit trigger price (USD). Submitted as a
+   *  conditional attached to the position. */
+  takeProfitPrice?: number;
+  /** Optional stop-loss trigger price (USD). Submitted as a
+   *  conditional attached to the position. */
+  stopLossPrice?: number;
 }
 
 export interface ClosePositionParams {
@@ -95,16 +106,29 @@ export interface PositionState {
   handle: string;
   market: MarketId;
   side: Side;
+  /** Signed base-unit size as string. Negative for shorts. */
   size: string;
+  /** Absolute size in base units (e.g. SOL) as a number, convenience. */
+  sizeBase?: number;
   collateral: bigint;
   collateralMint: CollateralMint;
   /** Unrealized PnL in collateral mint base units. May be approximate
    *  on oracle venues if the mark moved between read and quote. */
   unrealizedPnl: bigint;
+  /** Unrealized PnL in USDC as a decimal number, convenience. */
+  upnlUsd?: number;
+  /** Entry price in USD, if the venue exposes one. */
+  entryPriceUsd?: number;
   /** Liquidation price in USD, if the venue exposes one. */
   liquidationPriceUsd?: number;
+  /** Computed leverage (sizeNotional / collateralUsd) if both known. */
+  leverage?: number;
   /** Funding paid/earned since open, in collateral mint base units. */
   funding: bigint;
+  /** Configured take-profit triggers attached to this position. */
+  takeProfitTriggers?: Array<{ id: string; triggerPriceUsd: number; executionPriceUsd?: number }>;
+  /** Configured stop-loss triggers attached to this position. */
+  stopLossTriggers?: Array<{ id: string; triggerPriceUsd: number; executionPriceUsd?: number }>;
 }
 
 /** Result of an async lifecycle operation. For atomic venues, `status`

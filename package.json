@@ -1,6 +1,6 @@
 {
   "name": "@cloak.dev/perps",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Cloak Perp — privacy-first perpetuals on Phoenix. Shielded-trader (T) flow: W → Cloak USDC pool → T → Phoenix → exit → X.",
   "type": "module",
   "main": "./dist/index.js",
